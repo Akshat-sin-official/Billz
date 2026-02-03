@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core Background */
+    --background: 220 20% 97%;
+    --foreground: 220 25% 10%;
+    
+    /* Card & Surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 10%;
+    
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
+    
+    /* Primary - Deep Blue */
+    --primary: 220 70% 50%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary - Slate */
+    --secondary: 220 15% 92%;
+    --secondary-foreground: 220 25% 20%;
+    
+    /* Muted */
+    --muted: 220 15% 95%;
+    --muted-foreground: 220 15% 45%;
+    
+    /* Accent - Teal */
+    --accent: 175 70% 40%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Destructive - Red */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Success - Green */
+    --success: 142 70% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    /* Warning - Amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 10%;
+    
+    /* Border & Input */
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 220 70% 50%;
+    
+    /* Radius */
+    --radius: 0.5rem;
+    
+    /* Sidebar - Darker slate */
+    --sidebar-background: 220 25% 12%;
+    --sidebar-foreground: 220 15% 90%;
+    --sidebar-primary: 220 70% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 20% 20%;
+    --sidebar-accent-foreground: 220 15% 90%;
+    --sidebar-border: 220 20% 20%;
+    --sidebar-ring: 220 70% 55%;
+  }
+
+  .dark {
+    /* Core Background */
+    --background: 220 25% 8%;
+    --foreground: 220 15% 95%;
+    
+    /* Card & Surfaces */
+    --card: 220 25% 12%;
+    --card-foreground: 220 15% 95%;
+    
+    /* Popover */
+    --popover: 220 25% 12%;
+    --popover-foreground: 220 15% 95%;
+    
+    /* Primary - Brighter Blue */
+    --primary: 220 70% 55%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary */
+    --secondary: 220 20% 20%;
+    --secondary-foreground: 220 15% 90%;
+    
+    /* Muted */
+    --muted: 220 20% 15%;
+    --muted-foreground: 220 15% 60%;
+    
+    /* Accent - Teal */
+    --accent: 175 70% 45%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Destructive */
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Success */
+    --success: 142 70% 50%;
+    --success-foreground: 0 0% 100%;
+    
+    /* Warning */
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 10%;
+    
+    /* Border & Input */
+    --border: 220 20% 22%;
+    --input: 220 20% 22%;
+    --ring: 220 70% 55%;
+    
+    /* Sidebar */
+    --sidebar-background: 220 30% 6%;
+    --sidebar-foreground: 220 15% 90%;
+    --sidebar-primary: 220 70% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 25% 15%;
+    --sidebar-accent-foreground: 220 15% 90%;
+    --sidebar-border: 220 25% 15%;
+    --sidebar-ring: 220 70% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Custom scrollbar */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+/* Keyboard focus styles */
+@layer utilities {
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-slide-in {
+    animation: slideIn 0.2s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.15s ease-out;
+  }
+  
+  .animate-pulse-soft {
+    animation: pulseSoft 2s ease-in-out infinite;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulseSoft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
