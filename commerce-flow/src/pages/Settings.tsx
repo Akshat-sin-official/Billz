@@ -36,13 +36,12 @@ import type { UserRole } from '@/types';
 
 export default function Settings() {
   const { toast } = useToast();
-  const [businessName, setBusinessName] = useState('Tech Store');
+  const { user } = useAuth();
+  const [businessName, setBusinessName] = useState(user?.businessName || 'Tech Store');
   const [currency, setCurrency] = useState('INR');
   const [taxCountry, setTaxCountry] = useState('india');
   const [invoicePrefix, setInvoicePrefix] = useState('INV');
   const [invoiceStartNumber, setInvoiceStartNumber] = useState('1');
-
-  const { user } = useAuth();
   const isOwner = user?.role === 'owner';
 
   // Staff management state

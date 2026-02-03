@@ -10,6 +10,7 @@ type DjangoUser = {
   organization_id?: string;
   branch_id?: string;
   avatar?: string;
+  business_name?: string;
   is_active?: boolean;
   created_at?: string;
 };
@@ -36,6 +37,7 @@ export function mapDjangoUserToUser(u: DjangoUser): User {
     organizationId: u.organization_id ?? '',
     branchId: u.branch_id,
     avatar: u.avatar,
+    businessName: u.business_name ?? '',
     isActive: u.is_active ?? true,
     createdAt: u.created_at ?? new Date().toISOString(),
   };

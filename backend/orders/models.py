@@ -12,7 +12,8 @@ class Order(models.Model):
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
+    organization_id = models.CharField(max_length=100, db_index=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
     branch_id = models.CharField(max_length=100, blank=True)
     customer_id = models.CharField(max_length=100, blank=True)
     invoice_number = models.CharField(max_length=100, unique=True)

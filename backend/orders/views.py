@@ -1,7 +1,7 @@
 import stripe
 import os
 from django.conf import settings
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Order
@@ -12,6 +12,20 @@ stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
 class CreateOrderView(generics.CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(
+            organization_id=self.request.user.organization_id,
+            created_by=self.request.user
+        )
+
+class OrderListView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(organization_id=self.request.user.organization_id)
 
 class CreatePaymentIntentView(APIView):
     def post(self, request, *args, **kwargs):

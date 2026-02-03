@@ -9,6 +9,7 @@ export interface User {
   branchId?: string;
   avatar?: string;
   isActive: boolean;
+  businessName?: string;
   createdAt: string;
 }
 
@@ -179,7 +180,7 @@ export interface Notification {
   createdAt: string;
 }
 
-export type NotificationType = 
+export type NotificationType =
   | 'low_stock_alert'
   | 'out_of_stock'
   | 'payment_received'
