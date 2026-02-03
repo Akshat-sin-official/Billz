@@ -1,3 +1,4 @@
+/* @refresh disable */
 import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { User, AuthState } from '@/types';

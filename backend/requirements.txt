@@ -1,0 +1,11 @@
+Django>=5.0
+djangorestframework
+django-cors-headers
+psycopg2-binary
+python-dotenv
+stripe
+whitenoise
+gunicorn
+djangorestframework-simplejwt
+django-compressor
+django-libsass

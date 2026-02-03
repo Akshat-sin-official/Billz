@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Building2,
   Receipt,
@@ -85,9 +85,9 @@ export default function Settings() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Business Name</Label>
-                  <Input 
-                    value={businessName} 
-                    onChange={(e) => setBusinessName(e.target.value)} 
+                  <Input
+                    value={businessName}
+                    onChange={(e) => setBusinessName(e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
@@ -156,22 +156,22 @@ export default function Settings() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Invoice Prefix</Label>
-                  <Input 
-                    value={invoicePrefix} 
-                    onChange={(e) => setInvoicePrefix(e.target.value.toUpperCase())} 
+                  <Input
+                    value={invoicePrefix}
+                    onChange={(e) => setInvoicePrefix(e.target.value.toUpperCase())}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label>Start Number</Label>
-                  <Input 
+                  <Input
                     type="number"
-                    value={invoiceStartNumber} 
-                    onChange={(e) => setInvoiceStartNumber(e.target.value)} 
+                    value={invoiceStartNumber}
+                    onChange={(e) => setInvoiceStartNumber(e.target.value)}
                   />
                 </div>
                 <div className="col-span-2 space-y-2">
                   <Label>Terms & Conditions</Label>
-                  <Textarea 
+                  <Textarea
                     placeholder="Enter invoice terms and conditions..."
                     rows={4}
                   />
