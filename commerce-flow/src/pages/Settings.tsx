@@ -30,6 +30,9 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { authApi } from '@/lib/authApi';
+import type { UserRole } from '@/types';
 
 export default function Settings() {
   const { toast } = useToast();
@@ -38,6 +41,68 @@ export default function Settings() {
   const [taxCountry, setTaxCountry] = useState('india');
   const [invoicePrefix, setInvoicePrefix] = useState('INV');
   const [invoiceStartNumber, setInvoiceStartNumber] = useState('1');
+
+  const { user } = useAuth();
+  const isOwner = user?.role === 'owner';
+
+  // Staff management state
+  const [staff, setStaff] = useState<any[]>([]);
+  const [isLoadingStaff, setIsLoadingStaff] = useState(false);
+  const [staffEmail, setStaffEmail] = useState('');
+  const [staffPassword, setStaffPassword] = useState('');
+  const [staffFirstName, setStaffFirstName] = useState('');
+  const [staffLastName, setStaffLastName] = useState('');
+  const [staffRole, setStaffRole] = useState<UserRole>('cashier');
+  const [isAddingStaff, setIsAddingStaff] = useState(false);
+
+  useEffect(() => {
+    if (isOwner) {
+      fetchStaff();
+    }
+  }, [isOwner]);
+
+  const fetchStaff = async () => {
+    setIsLoadingStaff(true);
+    try {
+      const data = await authApi.getStaff();
+      setStaff(data);
+    } catch (error) {
+      console.error('Failed to fetch staff:', error);
+    } finally {
+      setIsLoadingStaff(false);
+    }
+  };
+
+  const handleAddStaff = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsAddingStaff(true);
+    try {
+      await authApi.addStaff({
+        email: staffEmail,
+        password: staffPassword,
+        firstName: staffFirstName,
+        lastName: staffLastName,
+        role: staffRole,
+      });
+      toast({
+        title: "Staff Added",
+        description: `${staffFirstName} has been added as a ${staffRole}.`,
+      });
+      setStaffEmail('');
+      setStaffPassword('');
+      setStaffFirstName('');
+      setStaffLastName('');
+      fetchStaff();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to add staff member.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAddingStaff(false);
+    }
+  };
 
   const handleSave = () => {
     toast({
@@ -54,7 +119,7 @@ export default function Settings() {
       </div>
 
       <Tabs defaultValue="business" className="space-y-6">
-        <TabsList className="grid grid-cols-5 w-full">
+        <TabsList className={`grid w-full ${isOwner ? 'grid-cols-6' : 'grid-cols-5'}`}>
           <TabsTrigger value="business" className="gap-2">
             <Building2 className="h-4 w-4" />
             Business
@@ -75,6 +140,12 @@ export default function Settings() {
             <Palette className="h-4 w-4" />
             Theme
           </TabsTrigger>
+          {isOwner && (
+            <TabsTrigger value="team" className="gap-2">
+              <Users className="h-4 w-4" />
+              Team
+            </TabsTrigger>
+          )}
         </TabsList>
 
         {/* Business Settings */}
@@ -368,6 +439,129 @@ export default function Settings() {
             </div>
           </div>
         </TabsContent>
+
+        {/* Team Settings (Owner Only) */}
+        {isOwner && (
+          <TabsContent value="team" className="space-y-6">
+            <div className="bg-card border rounded-lg p-6 space-y-8">
+              <div>
+                <h3 className="text-lg font-semibold mb-4 text-primary flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Add Team Member
+                </h3>
+                <form onSubmit={handleAddStaff} className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="staff-first-name">First Name</Label>
+                    <Input
+                      id="staff-first-name"
+                      placeholder="John"
+                      required
+                      value={staffFirstName}
+                      onChange={(e) => setStaffFirstName(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="staff-last-name">Last Name</Label>
+                    <Input
+                      id="staff-last-name"
+                      placeholder="Doe"
+                      required
+                      value={staffLastName}
+                      onChange={(e) => setStaffLastName(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="staff-email">Email Address</Label>
+                    <Input
+                      id="staff-email"
+                      type="email"
+                      placeholder="john@example.com"
+                      required
+                      value={staffEmail}
+                      onChange={(e) => setStaffEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="staff-password">Initial Password</Label>
+                    <Input
+                      id="staff-password"
+                      type="password"
+                      placeholder="••••••••"
+                      required
+                      value={staffPassword}
+                      onChange={(e) => setStaffPassword(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2 col-span-2 md:col-span-1">
+                    <Label htmlFor="staff-role">Access Role</Label>
+                    <Select value={staffRole} onValueChange={(v: UserRole) => setStaffRole(v)}>
+                      <SelectTrigger id="staff-role">
+                        <SelectValue placeholder="Select role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="manager">Manager (Full POS + Reports)</SelectItem>
+                        <SelectItem value="cashier">Cashier (POS Only)</SelectItem>
+                        <SelectItem value="auditor">Auditor (Reports Only)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex items-end col-span-2 md:col-span-1">
+                    <Button type="submit" className="w-full" disabled={isAddingStaff}>
+                      {isAddingStaff ? "Adding..." : "Add Staff Member"}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Team List</h3>
+                <p className="text-sm text-muted-foreground mb-4">View and manage your current staff members</p>
+
+                {isLoadingStaff ? (
+                  <div className="flex justify-center p-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                  </div>
+                ) : staff.length > 0 ? (
+                  <div className="border rounded-md overflow-hidden">
+                    <table className="w-full text-sm">
+                      <thead className="bg-muted/50 border-b">
+                        <tr>
+                          <th className="px-4 py-2 text-left font-medium">Name</th>
+                          <th className="px-4 py-2 text-left font-medium">Email</th>
+                          <th className="px-4 py-2 text-left font-medium">Role</th>
+                          <th className="px-4 py-2 text-right font-medium">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y">
+                        {staff.map((member) => (
+                          <tr key={member.id} className="hover:bg-muted/30">
+                            <td className="px-4 py-2">{member.firstName} {member.lastName}</td>
+                            <td className="px-4 py-2 text-muted-foreground">{member.email}</td>
+                            <td className="px-4 py-2">
+                              <span className="capitalize px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs">
+                                {member.role}
+                              </span>
+                            </td>
+                            <td className="px-4 py-2 text-right">
+                              <Button variant="ghost" size="sm">Edit</Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="bg-muted/50 rounded-md p-8 text-center border-dashed border-2">
+                    <Users className="h-10 w-10 mx-auto text-muted-foreground mb-2" />
+                    <p className="text-sm text-muted-foreground">No staff members found</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </TabsContent>
+        )}
       </Tabs>
 
       {/* Save Button */}

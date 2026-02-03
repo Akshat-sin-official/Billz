@@ -84,4 +84,21 @@ export const authApi = {
       tokenStorage.clear();
     }
   },
+
+  async addStaff(data: any) {
+    const payload = {
+      email: data.email,
+      password: data.password,
+      first_name: data.firstName,
+      last_name: data.lastName,
+      role: data.role,
+    };
+    const result = await api.post<{ user: DjangoUser; message: string }>('/auth/add-staff/', payload);
+    return result;
+  },
+
+  async getStaff() {
+    const data = await api.get<DjangoUser[]>('/auth/staff/');
+    return data.map(mapDjangoUserToUser);
+  },
 };
