@@ -30,7 +30,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 class StaffListView(generics.ListAPIView):
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticated, IsOwner)
+    permission_classes = (permissions.IsAuthenticated, IsOwnerOrManager)
 
     def get_queryset(self):
         return User.objects.filter(organization_id=self.request.user.organization_id)
