@@ -9,3 +9,4 @@ gunicorn
 djangorestframework-simplejwt
 django-compressor
 django-libsass
+dj-database-url

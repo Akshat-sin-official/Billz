@@ -10,6 +10,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Category.objects.filter(organization_id=self.request.user.organization_id)
 
+    def perform_create(self, serializer):
+        serializer.save(organization_id=self.request.user.organization_id)
+
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.none()
     serializer_class = ProductSerializer
@@ -17,3 +20,6 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Product.objects.filter(organization_id=self.request.user.organization_id)
+
+    def perform_create(self, serializer):
+        serializer.save(organization_id=self.request.user.organization_id)

@@ -121,7 +121,9 @@ export async function apiRequest<T>(
   }
 
   if (!res.ok) {
-    throw new Error(await parseError(res));
+    const errorMsg = await parseError(res);
+    console.error(`API Error [${res.status}] ${url}:`, errorMsg);
+    throw new Error(errorMsg);
   }
 
   const text = await res.text();
