@@ -8,6 +8,9 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    # Use a placeholder for dev, but this will still trigger a warning in production
+    SECRET_KEY = 'django-insecure-placeholder-for-debugging-purposes'
 
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
