@@ -61,10 +61,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'commerce_project.wsgi.application'
 
+import sys
 db_from_env = dj_database_url.config(conn_max_age=600)
 if db_from_env:
+    print("DEBUG: DATABASE_URL found. Using cloud database.", file=sys.stderr)
     DATABASES = {'default': db_from_env}
 else:
+    print("DEBUG: DATABASE_URL NOT FOUND. Falling back to LOCALHOST.", file=sys.stderr)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
