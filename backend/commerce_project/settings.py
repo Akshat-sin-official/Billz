@@ -62,6 +62,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'commerce_project.wsgi.application'
 
 import sys
+print(f"DEBUG: All environment variables: {list(os.environ.keys())}", file=sys.stderr)
 db_from_env = dj_database_url.config(conn_max_age=600)
 if db_from_env:
     print("DEBUG: DATABASE_URL found. Using cloud database.", file=sys.stderr)
