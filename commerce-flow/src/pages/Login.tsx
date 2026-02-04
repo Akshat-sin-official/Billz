@@ -13,13 +13,13 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       toast.error('Please fill in all fields');
       return;
@@ -108,22 +108,9 @@ export default function Login() {
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign in
               </Button>
-              <p className="text-center text-sm text-muted-foreground">
-                Don't have an account?{' '}
-                <Link to="/register" className="text-primary hover:underline">
-                  Create account
-                </Link>
-              </p>
             </CardFooter>
           </form>
         </Card>
-
-        {/* Demo credentials hint */}
-        <div className="rounded-lg border border-dashed bg-muted/30 p-4">
-          <p className="text-center text-xs text-muted-foreground">
-            <strong>Demo:</strong> Use any email and password to sign in
-          </p>
-        </div>
       </div>
     </div>
   );

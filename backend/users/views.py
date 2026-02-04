@@ -3,18 +3,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import get_user_model
-from .serializers import UserSerializer, RegisterSerializer, AddStaffSerializer
-from .permissions import IsOwner
+from .serializers import UserSerializer, AddStaffSerializer
+from .permissions import IsOwnerOrManager
 
 User = get_user_model()
 
-class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    permission_classes = (permissions.AllowAny,)
-    serializer_class = RegisterSerializer
-
 class AddStaffView(generics.CreateAPIView):
-    permission_classes = (permissions.IsAuthenticated, IsOwner)
+    permission_classes = (permissions.IsAuthenticated, IsOwnerOrManager)
     serializer_class = AddStaffSerializer
 
     def create(self, request, *args, **kwargs):

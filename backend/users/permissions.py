@@ -6,3 +6,10 @@ class IsOwner(permissions.BasePermission):
     """
     def has_permission(self, request, view):
         return bool(request.user and request.user.is_authenticated and request.user.role == 'owner')
+
+class IsOwnerOrManager(permissions.BasePermission):
+    """
+    Custom permission to allow Owners and Managers to perform the action.
+    """
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_authenticated and request.user.role in ['owner', 'manager'])
