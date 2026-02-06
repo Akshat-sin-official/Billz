@@ -6,6 +6,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('users.urls')),
+    path('api/core/', include('core.urls')),  # Multi-tenant core APIs
     path('api/products/', include('products.urls')),
     path('api/orders/', include('orders.urls')),
+    path('api/invoices/', include('orders.invoice_urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
