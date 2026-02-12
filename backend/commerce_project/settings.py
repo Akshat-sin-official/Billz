@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'core',  # Multi-tenant infrastructure
+    'core',
     'users',
     'products',
     'orders',

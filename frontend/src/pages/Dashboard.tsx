@@ -149,8 +149,8 @@ export default function Dashboard() {
                         invoice.status === 'completed'
                           ? 'default'
                           : invoice.status === 'partial'
-                          ? 'secondary'
-                          : 'destructive'
+                            ? 'secondary'
+                            : 'destructive'
                       }
                       className="mt-1"
                     >
